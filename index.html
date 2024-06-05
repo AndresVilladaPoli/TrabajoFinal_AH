@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Fan and LED Controller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,"> 
+    <style>
+        html {
+            font-family: Helvetica;
+            display: inline-block;
+            margin: 0px auto;
+            text-align: center;
+        }
+        h1 {
+            color: #0F3376;
+            padding: 2vh;
+        }
+        p {
+            font-size: 1.5rem;
+        }
+        .button {
+            display: inline-block;
+            background-color: #e7bd3b;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            font-size: 30px;
+            margin: 2px;
+            cursor: pointer;
+        }
+        .button2 {
+            background-color: #4286f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>ESP32 Fan and LED Controller</h1> 
+    <h2>Ventilador</h2>
+    <input type="range" min="0" max="1023" value="0" id="fanSlider" oninput="updateFanSpeed(this.value)">
+    <h2>LED</h2>
+    <p>LED state: <strong id="ledState">OFF</strong></p>
+    <p><button class="button" onclick="sendRequest('/?led=on')">ON</button></p>
+    <p><button class="button button2" onclick="sendRequest('/?led=off')">OFF</button></p>
+    <script>
+        function sendRequest(url) {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    const ledState = data.match(/<strong id="ledState">(.*?)<\/strong>/)[1];
+                    document.getElementById('ledState').innerText = ledState;
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+
+        function updateFanSpeed(value) {
+            fetch('/fan?speed=' + value)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    document.getElementById('fanSpeed').innerText = value;
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+    </script>
+</body>
+</html>
