@@ -23,10 +23,10 @@ async def publish_data(client):
                 print("Datos publicados:", payload_json)
             else:
                 print("No se pudieron leer los datos del sensor.")
-            await asyncio.sleep(20)
+            await asyncio.sleep(30)
         except Exception as e:
             print("Error al publicar los datos:", e)
-            await asyncio.sleep(10)
+            await asyncio.sleep(30)
 
 
 async def init_services():
