@@ -39,15 +39,15 @@ async def handle_client(client_sock):
 
         if "GET /?led=on" in request:
             print("LED ON")
-            await control_led(True)
+            control_led(True)
         elif "GET /?led=off" in request:
             print("LED OFF")
-            await control_led(False)
+            control_led(False)
         elif "GET /fan?" in request:
             params = request.split("GET /fan?")[1].split(" ")[0]
             if "=" in params:
                 speed = int(params.split("=")[1])
-                await set_fan_speed(speed)
+                set_fan_speed(speed)
             else:
                 print("Invalid fan parameters")
 
